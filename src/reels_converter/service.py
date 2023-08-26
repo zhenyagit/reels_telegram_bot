@@ -29,7 +29,7 @@ class Service:
             try:
                 if self.stop_event.is_set():
                     break
-                reel_raw_link, chat_id = self.download_queue.get()
+                chat_id, reel_raw_link = self.download_queue.get()
                 logger.info(f"Get reel_raw_link: {reel_raw_link}, chat_id: {chat_id}")
                 binary_reel = ReelsDownloader.download_reel_raw_link(reel_raw_link)
                 self.send_binary_reel(chat_id, binary_reel)
