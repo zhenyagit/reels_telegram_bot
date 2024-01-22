@@ -39,7 +39,7 @@ class ReelsDownloader:
             resp = requests.get(link, headers=headers, params=params).json()
             reel_link = resp['data']['shortcode_media']['video_url']
         except Exception as ex:
-            logger.error(f"Сant create link because: {ex}")
+            logger.error(f"Сant create link because: {ex}, resp: {resp}")
             raise CantCreateReelLink("No connection")
         logger.debug(f"Created reel link: {reel_link} for reel id: {reel_id}")
         return reel_link

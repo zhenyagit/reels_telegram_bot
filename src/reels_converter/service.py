@@ -20,7 +20,8 @@ class Service:
         self.thread_downloader = None
     
     def db_add_person(self, message:Message):
-        if self.repository.is_person_exist(message.chat.id):
+        repository = Repository()
+        if repository.is_person_exist(message.chat.id):
             return
         user = {
             "id": message.chat.id,
@@ -34,7 +35,7 @@ class Service:
     def db_add_video(self, reel:BytesIO, chat_id):
         video = {
             "id": 123,
-            "size": len(reel),
+            "size": reel.getbuffer().nbytes // 1024,
             "date": int(time.time()),
             "chat_id": chat_id
         }
