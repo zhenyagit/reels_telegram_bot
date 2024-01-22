@@ -18,7 +18,6 @@ class Service:
         self.bot = bot
         self.stop_event = Event()
         self.thread_downloader = None
-        self.repository = Repository()
     
     def db_add_person(self, message:Message):
         if self.repository.is_person_exist(message.chat.id):
@@ -29,7 +28,8 @@ class Service:
             "first_name": message.chat.first_name,
             "last_name": message.chat.last_name,
         }
-        self.repository.add_user(user)
+        repository = Repository()
+        repository.add_user(user)
 
     def db_add_video(self, reel:BytesIO, chat_id):
         video = {
@@ -38,7 +38,8 @@ class Service:
             "date": int(time.time()),
             "chat_id": chat_id
         }
-        self.repository.add_video(video)
+        repository = Repository()
+        repository.add_video(video)
 
     def add_to_queue(self, chat_id, raw_reel_link):
         self.download_queue.put([chat_id, raw_reel_link])

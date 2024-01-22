@@ -4,6 +4,7 @@ from telebot import TeleBot
 from telebot.types import Message
 import time
 
+from src.reels_converter.repository.repository import Repository
 from src.reels_converter.service import Service
 
 logging.basicConfig(level=logging.DEBUG)
@@ -31,9 +32,10 @@ def get_status(message:Message):
     if not message.chat.username == "imjs_man":
         return
     data = {}
-    users = service.repository.get_users()
+    repository = Repository()
+    users = repository.get_users()
     for user in users:
-        videos = service.repository.get_videos(user[0])
+        videos = repository.get_videos(user[0])
         data[user[1]] = videos
     bot.send_message(chat_id, f"{data}")
     
