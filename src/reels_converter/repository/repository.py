@@ -12,6 +12,7 @@ class Repository():
         self.create_tables()
 
     def create_tables(self):
+        logger.debug("Creating tables")
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS Users (
                 id INTEGER PRIMARY KEY,
@@ -41,12 +42,15 @@ class Repository():
         self.connection.commit()
 
     def add_user(self, user_data):
+        logger.debug(f"Add user to db: {user_data}")
         self._post_row("Users", user_data)
     
     def add_video(self, video_data):
+        logger.debug(f"Add video to db: {video_data}")
         self._post_row("Videos", video_data)
     
     def is_person_exist(self, chat_id):
+        logger.debug(f"Check user: {chat_id}")
         self.cursor.execute(f'SELECT *  FROM Users WHERE id={chat_id}')
         results = self.cursor.fetchall()
         if len(results) > 0:
@@ -54,18 +58,24 @@ class Repository():
         return False
     
     def get_users(self):
+        logger.debug(f"Get all users")
         self.cursor.execute(f'SELECT *  FROM Users')
         results = self.cursor.fetchall()
+        logger.debug(f"Users from db: {results}")
         return results
 
     def get_videos(self, user_id):
+        logger.debug(f"Get all videos: {user_id}")
         self.cursor.execute(f'SELECT *  FROM Videos WHERE chat_id={user_id}')
         results = self.cursor.fetchall()
+        logger.debug(f"All videos: {results}")
         return results
     
     def get_sum_video_size(self, user_id):
+        logger.debug(f"Get all videos size: {user_id}")
         self.cursor.execute(f'SELECT SUM(size)  FROM Videos WHERE chat_id={user_id}')
         results = self.cursor.fetchall()
+        logger.debug(f"Get all videos size: {results}")
         return results
 
 class TestStringMethods(unittest.TestCase):

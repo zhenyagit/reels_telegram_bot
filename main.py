@@ -26,6 +26,7 @@ def start_command(message:Message):
 
 @bot.message_handler(commands=["status"])
 def get_status(message:Message):
+    logger.info(f"{message.chat.username} trying to get status")
     chat_id = message.chat.id
     if not message.chat.username == "imjs_man":
         return
