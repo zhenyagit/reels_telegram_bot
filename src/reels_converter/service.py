@@ -3,8 +3,11 @@ from telebot import TeleBot
 from threading import Thread, Event
 from io import BytesIO
 import logging
+from telebot.types import Message
+import time
 
-from .reels_downloader import ReelsDownloader
+from .repository.repository import Repository
+from .reels_downloader.reels_downloader import ReelsDownloader
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +18,35 @@ class Service:
         self.bot = bot
         self.stop_event = Event()
         self.thread_downloader = None
+        self.repository = Repository()
     
+    def db_add_person(self, message:Message):
+        if self.repository.is_person_exist(message.chat.id):
+            return
+        user = {
+            "id": message.chat.id,
+            "username": message.chat.username,
+            "first_name": message.chat.first_name,
+            "last_name": message.chat.last_name,
+        }
+        self.repository.add_user(user)
+
+    def db_add_video(self, reel:BytesIO, chat_id):
+        video = {
+            "id": 123,
+            "size": len(reel),
+            "date": int(time.time()),
+            "chat_id": chat_id
+        }
+        self.repository.add_video(video)
+
     def add_to_queue(self, chat_id, raw_reel_link):
         self.download_queue.put([chat_id, raw_reel_link])
         logger.info(f"Added to queue raw_reel_link: {raw_reel_link}, chat_id: {chat_id}")
 
     def send_binary_reel(self, chat_id, binary_reel):
         reel = BytesIO(binary_reel)
+        self.db_add_video(reel, chat_id)
         self.bot.send_video(chat_id, reel)
 
     def infinity_downloader(self):

@@ -1,7 +1,7 @@
 import requests
 import re
 import logging
-from .exceptions import *
+from ..exceptions import *
 
 logger = logging.getLogger(__name__)
 
