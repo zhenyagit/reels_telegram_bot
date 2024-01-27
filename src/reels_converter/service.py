@@ -5,6 +5,7 @@ from io import BytesIO
 import logging
 from telebot.types import Message
 import time
+import random
 
 from .repository.repository import Repository
 from .reels_downloader.reels_downloader import ReelsDownloader
@@ -34,7 +35,7 @@ class Service:
 
     def db_add_video(self, reel:BytesIO, chat_id):
         video = {
-            "id": 123,
+            "id": random.getrandbits(32),
             "size": reel.getbuffer().nbytes // 1024,
             "date": int(time.time()),
             "chat_id": chat_id

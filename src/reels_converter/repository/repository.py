@@ -23,7 +23,7 @@ class Repository():
             ''')
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS Videos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id LONG INTEGER PRIMARY KEY,
                 size INTEGER,
                 chat_id INTEGER,
                 date INTEGER,
